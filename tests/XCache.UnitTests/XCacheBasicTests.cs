@@ -5,13 +5,11 @@ namespace XCache.UnitTests;
 
 public class XCacheBasicTests
 {
-    private XCache<int, string> CreateCache(TimeSpan expirationTime, CacheExpirationPolicy policy)
-    {
-        return new XCache<int, string>(
+    private XCache<int, string> CreateCache(TimeSpan expirationTime, CacheExpirationPolicy policy) 
+        => new XCache<int, string>(
             maxExpirationTime: expirationTime, 
             cacheExpirationPolicy: policy,
             logger: new NullLogger<XCache<int, string>>());
-    }
 
     [Fact]
     public void AddOrUpdate_ShouldStoreEntry_ReturnsTrue()

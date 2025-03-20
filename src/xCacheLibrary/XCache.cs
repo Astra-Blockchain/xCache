@@ -40,7 +40,8 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
         m_disposed = false;
         
         InitConcurrentDictionaries();
-        StartCleanUpExpiredEntriesTask();
+        _ = Task.Run(async () => await StartCleanUpExpiredEntriesTask());
+
     }
 
     private void InitConcurrentDictionaries()
