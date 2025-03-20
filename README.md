@@ -1,14 +1,14 @@
 # xCache
-A Memcache Library for .NET. This is a thread safe non-blocking and scalable in-memory cache.  
-
-In your case, we want all waiting threads to receive the same copy of `m_newDict` when it updates. `AsyncAutoResetEvent` ensures that, 
-but only one thread wakes up per `Set()` call. If we want all waiting threads to wake up at the same time and see the same dictionary, 
-we could create and use `AsyncManualResetEvent` instead.
+A Memcache Library for .NET. This is a thread safe non-blocking and scalable in-memory cache.
 
 ## `xCache.cs`
 
 
 ## `AsyncAutoResetEvent.cs`
+We want all waiting threads to receive the same copy of `m_newDict` when it updates. `AsyncAutoResetEvent` ensures that,
+but only one thread wakes up per `Set()` call. If we want all waiting threads to wake up at the same time and see the same dictionary,
+we could create and use `AsyncManualResetEvent` instead.
+
 ### How does it work
 1. First `Set()` call happens
 2. Only **1** thread is released.
@@ -71,6 +71,15 @@ Thread 2 sees new dictionary: <same dictionary>
 * Yes, with `AsyncAutoResetEvent`, **all dictionaries** (or memory objects) remain the same until the next update and `Set()` call.
 * Since only one waiting thread wakes up per `Set()` call, all other waiting threads see the same dictionary references (or memory objects) until another update occurs.
 
-*ques*?
+Why is `m_newDict` and `m_oldDict` empty in the class but still accessible in `TryGetValueAsync`?*
+* When `StartCleanUpExpiredEntriesTask()` runs, it reassigns `m_oldDict = m_newDict` and then creates a new instance for `m_newDict`.
+Since `m_newDict` is reassigned to a new `ConcurrentDictionary<TKey, TValue>`, the **previous** reference that `m_oldDict` was pointing to **still exists** and is 
+accessible in the `TryGetValueAsync()` method because it was captured earlier.
+However, the fields in `this` (the main class instance) reflect the latest assignment where both dictionaries are reset.
+So, new cache allocation does not erase old references: The old cache remains reachable until all threads referencing it finish execution.
+
+* **Thread safety & race conditions**: If another thread accesses `TryGetValueAsync()` before the cleanup task runs, it can still retrieve values from the old dictionary.
+
+
 
 
