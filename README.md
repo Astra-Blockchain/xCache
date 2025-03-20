@@ -2,7 +2,8 @@
 xCache is a high-performance, thread-safe in-memory caching library written in C# 
 that supports automatic expiration and concurrent access. 
 It is designed for use cases where cached values need to expire 
-after a given time but can be extended when accessed.
+after a given time but can be extended when accessed. This caching library was initially built for an internal project
+that will be used for blockchain operations.
 
 ## Features
 **Thread-Safe**: Uses `ConcurrentDictionary<TKey, TValue>` to ensure atomic updates.
@@ -125,5 +126,7 @@ So, new cache allocation does not erase old references: The old cache remains re
 
 This project is open-source and available under the MIT License.
 
+
+Author: Giovanny Hernandez
 
 
