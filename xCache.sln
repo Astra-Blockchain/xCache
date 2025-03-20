@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6C6CA5F0-B47
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xCacheLibrary", "src\xCacheLibrary\xCacheLibrary.csproj", "{09C44E04-1C40-4513-9401-252ACC8F1BEA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7E7B0C12-4D69-4E74-8A93-21491B9142A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XCache.UnitTests", "tests\XCache.UnitTests\XCache.UnitTests.csproj", "{C63815F1-F622-4FE7-9C6F-638BEBB1A257}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +24,13 @@ Global
 		{09C44E04-1C40-4513-9401-252ACC8F1BEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C44E04-1C40-4513-9401-252ACC8F1BEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C44E04-1C40-4513-9401-252ACC8F1BEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C63815F1-F622-4FE7-9C6F-638BEBB1A257}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63815F1-F622-4FE7-9C6F-638BEBB1A257}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63815F1-F622-4FE7-9C6F-638BEBB1A257}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63815F1-F622-4FE7-9C6F-638BEBB1A257}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{09C44E04-1C40-4513-9401-252ACC8F1BEA} = {6C6CA5F0-B47C-480A-815F-7F45DF981E53}
+		{C63815F1-F622-4FE7-9C6F-638BEBB1A257} = {7E7B0C12-4D69-4E74-8A93-21491B9142A8}
 	EndGlobalSection
 EndGlobal

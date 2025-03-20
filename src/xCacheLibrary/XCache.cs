@@ -323,7 +323,7 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
     /// <summary>
     /// Starts the background cleanup task to expire the cache at fixed intervals.
     /// </summary>
-    private async void StartCleanUpExpiredEntriesTask()
+    private async Task StartCleanUpExpiredEntriesTask()
     {
         while (!m_disposed)
         {
