@@ -132,6 +132,9 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
 
         oldDictRef.TryRemove(key, out _);
         
+        // Notify that the cache has changed
+        m_dictUpdatedEvent.Set();
+        
         if (isValueAssignedFromValueFactory)
         {
             m_logger.LogInformation("{CacheName} Added an entry with key: {Key} to the cache.", m_cacheName, key);
@@ -161,11 +164,14 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
     {
         var (newDictRef, oldDictRef) = await GetConcurrentDictionaryRefsAsync();
 
-        // Always update `_newDict`
+        // Always update the new cache
         newDictRef[key] = value;
 
-        // Remove key from `_oldDict`
+        // Remove key from old cache
         oldDictRef.TryRemove(key, out _);
+        
+        // Notify that the cache has changed
+        m_dictUpdatedEvent.Set();
 
         m_logger.LogInformation("{CacheName} Added or updated an entry with key {Key} in the cache.", m_cacheName, key);
     }
@@ -218,6 +224,9 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
         }
         else
         {
+            // Notify that the cache has changed
+            m_dictUpdatedEvent.Set();
+            
             m_logger.LogInformation("{CacheName}: Removed an entry with key: {Key} from the cache.", m_cacheName, key);
         }
 
@@ -324,6 +333,9 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
 
             // NOTE: This will allocate a new dictionary even if the cache is empty.
             m_newDict = new ConcurrentDictionary<TKey, TValue>(m_keyComparer);
+            
+            // Notify that the cache has changed
+            m_dictUpdatedEvent.Set();
 
             m_logger.LogInformation("Cache cleanup completed. New cache allocated.");
         }
