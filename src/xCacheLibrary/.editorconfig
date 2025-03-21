@@ -1,0 +1,50 @@
+# Root of configuration
+root = true
+
+[*.cs]
+
+# Enforce C# naming conventions
+
+# Private fields must start with "m_"
+dotnet_naming_rule.private_fields_should_have_m_prefix.severity = error
+dotnet_naming_rule.private_fields_should_have_m_prefix.style = private_fields_m_prefix
+dotnet_naming_rule.private_fields_should_have_m_prefix.symbols = private_fields
+
+# Static fields must start with "s_"
+dotnet_naming_rule.static_fields_should_have_s_prefix.severity = error
+dotnet_naming_rule.static_fields_should_have_s_prefix.style = static_fields_s_prefix
+dotnet_naming_rule.static_fields_should_have_s_prefix.symbols = static_fields
+
+# Enums should be PascalCase
+dotnet_naming_rule.enums_should_be_pascal_case.severity = error
+dotnet_naming_rule.enums_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.enums_should_be_pascal_case.symbols = enum_members
+
+# Define naming styles
+dotnet_naming_style.private_fields_m_prefix.capitalization = camel_case
+dotnet_naming_style.private_fields_m_prefix.required_prefix = m_
+
+dotnet_naming_style.static_fields_s_prefix.capitalization = camel_case
+dotnet_naming_style.static_fields_s_prefix.required_prefix = s_
+
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# Define symbol groups
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.applicable_modifiers = instance
+
+# s_ prefix for static fields [Takes priority for fields matched by the above rule.]
+dotnet_naming_rule.nonpublic_instance_fields_s_prefix.symbols = nonpublic_static_fields
+dotnet_naming_rule.nonpublic_instance_fields_s_prefix.style = nonpublic_static_style
+dotnet_naming_rule.nonpublic_instance_fields_s_prefix.severity = error
+dotnet_naming_symbols.nonpublic_static_fields.applicable_kinds = field
+dotnet_naming_symbols.nonpublic_static_fields.applicable_accessibilities = private, protected, private_protected
+dotnet_naming_symbols.nonpublic_static_fields.required_modifiers = static
+dotnet_naming_style.nonpublic_static_style.required_prefix = s_
+dotnet_naming_style.nonpublic_static_style.capitalization = camel_case
+dotnet_naming_symbols.static_fields.applicable_kinds = field
+dotnet_naming_symbols.static_fields.applicable_modifiers = static
+
+dotnet_naming_symbols.enum_members.applicable_kinds = field
+dotnet_naming_symbols.enum_members.applicable_modifiers = const
