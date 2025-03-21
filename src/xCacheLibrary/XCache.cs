@@ -40,8 +40,11 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
         m_disposed = false;
         
         InitConcurrentDictionaries();
+        
+        // CPU bound work, ask the thread pool to put it on another thread.
+        // This ensures the cleanup process runs in the background without blocking the constructor.
+        // There's no expected exceptions which it is not a concern if an exception is lost.
         _ = Task.Run(async () => await StartCleanUpExpiredEntriesTask());
-
     }
 
     private void InitConcurrentDictionaries()

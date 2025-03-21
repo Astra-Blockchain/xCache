@@ -56,4 +56,4 @@ public interface IConcurrentDictionary<TKey, TValue>
 /// <summary>
 /// Represents a concurrent cache that extends a dictionary with thread-safe caching capabilities.
 /// </summary>
-public interface IConcurrentXCache<Tkey, TValue> : IConcurrentDictionary<Tkey, TValue> { }
+public interface IConcurrentXCache<TKey, TValue> : IConcurrentDictionary<TKey, TValue> { }

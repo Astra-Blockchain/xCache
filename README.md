@@ -102,6 +102,48 @@ Thread 2 sees new dictionary: <same dictionary>
 ## Running Tests
 All tests are provided under `test/` directory using xUnit. Feel free to add or update any tests.
 
+## Contribution 
+We welcome contributions to **xCache**! To ensure a smooth workflow, please follow these steps when submitting a new feature or fix.
+
+Before making any changes, create a new branch following the naming convention:
+```terminal
+<feature>/<your-alias>
+
+cache-async-impl/gio
+```
+
+* Follow the existing code style and naming conventions.
+* Ensure thread safety is maintained in cache operations.
+* Write tests for your changes using **xUnit**.
+
+
+### Pull Request
+* Provide a detailed description explaining the changes and keeping PRs
+minimal and tailored to specific changes.
+```angular2html
+## Reason for change
+...
+
+## Problem
+...
+
+## Solution
+...
+
+## Tests
+CacheTests.cs
+CacheTestsTwo.cs
+...
+```
+* Link any related GitHub Issues if applicable.
+* Wait for feedback and make any requested changes.
+
+Happy Hacking!
+
+
+
+
+
 ## Questions
 
 *Do all concurrent dictionaries remain the same in-memory?*
