@@ -329,6 +329,8 @@ public class XCache<TKey, TValue> : IConcurrentXCache<TKey, TValue>, IDisposable
     /// </summary>
     private async Task StartCleanUpExpiredEntriesTask()
     {
+        m_logger.LogInformation("Cleanup task started.");
+        
         while (!m_disposed)
         {
             await Delay();
