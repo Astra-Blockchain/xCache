@@ -1,3 +1,5 @@
+
+![xCache Preview](public/xcache.jpg)
 # xCache
 xCache is a high-performance, thread-safe in-memory caching library written in C# 
 that supports automatic expiration and concurrent access. 
@@ -38,6 +40,69 @@ xCache ensures safe access from multiple threads using `ConcurrentDictionary<TKe
 * Atomic Reads/Writes with `ConcurrentDictionary`.
 * Single-threaded cache expiration using an async cleanup task.
 * No race conditions due to built-in access patterns by `ConcurrentDictionary` APIs and asynchronous wake up calls.
+
+## Example 
+```csharp Extensions.cs
+public static IServiceCollection AddMemCache(this IServiceCollection services)
+{
+    return services.AddSingleton(provider =>
+    {
+        var logger = provider.GetRequiredService<ILogger<Program>>();
+
+        return new XCache<string, string>(
+            TimeSpan.FromMinutes(2),
+            CacheExpirationPolicy.ExtendExpirationTime,
+            logger);
+    });
+}
+```
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMemCache();
+```
+```csharp
+private async Task<ActionResult<string>> GenerateTokenAsync(AuthenticateUserCommand command)
+{
+    var (isFound, value) = await cache.TryGetValueAsync(command.Key);
+
+    // Nonce must be present in the cache. 
+    // The cache has an expiration time of about 2 minutes.
+    if (!isFound || value != command.Message)
+        return Unauthorized(new { error = "Unauthorized: Invalid or expired nonce" });
+    
+    var result = await Mediator!.Send(command);
+    
+    var token = result.Value; 
+
+    return Ok(token);
+}
+```
+```terminal
+info: Program[0]
+      Cleanup task started.
+info: Program[0]
+      Cache cleanup completed. New cache allocated. 
+info: Program[0]
+      xCache Added or updated an entry with key 2wRqPT7g4QfAr665pFvFDbXWp3ZnKSofMv6GsSCABAnN in the cache.
+info: Program[0]
+      xCache Added or updated an entry with key 2wRqPT7g4QfAr665pFvFDbXWp3ZnKSofMv6GsSCABAnN in the cache.
+info: Program[0]
+```
+
+Initially the cache will delay for the very 1st request. 
+
+First `AddOrUpdateAsync()` call:
+
+* Waits at `await m_dictUpdatedEvent.WaitAsync();`
+* It’s blocked because `m_dictUpdatedEvent.Set()` hasn’t been triggered yet.
+* That `Set()` only happens after the **first cleanup cycle** (after `await Delay()` finishes).
+
+After that first `Set()`:
+
+* The event is signaled,
+* Every future call to` AddOrUpdateAsync()` or `TryGetValueAsync()` returns immediately, without delay.
+
 
 ## `AsyncAutoResetEvent.cs`
 We want all waiting threads to receive the same copy of `m_newDict` when it updates. `AsyncAutoResetEvent` ensures that,
@@ -101,6 +166,8 @@ Thread 2 sees new dictionary: <same dictionary>
 
 ## Running Tests
 All tests are provided under `test/` directory using xUnit. Feel free to add or update any tests.
+x
+Please follow **AAA Pattern**, and follow method the `MethodName_StateUnderTest_ExpectedBehavior` method convention.
 
 ## Contribution 
 We welcome contributions to **xCache**! To ensure a smooth workflow, please follow these steps when submitting a new feature or fix.
